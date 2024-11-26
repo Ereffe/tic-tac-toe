@@ -2,18 +2,26 @@ import { act, useState } from "react";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
+
+function deriveActivePlayer(gameTurns) {
+  let currentPlayer = "X";
+
+  if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+    currentPlayer = "O";
+    console.log("o");
+  }
+  return currentPlayer;
+}
+
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
-  const [activePlayer, setActivePlayer] = useState("X");
+  //const [activePlayer, setActivePlayer] = useState("X");
+  const activePlayer = deriveActivePlayer(gameTurns);
 
   function handleSelctSqueare(rowIndex, colIndex) {
+    //setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
     setGameTurns((prevTurns) => {
-      let currentPlayer = activePlayer;
-
-      if (prevTurns > 0 && prevTurns[0].player === "X") {
-        currentPlayer = "O";
-        console.log("o");
-      }
+      const currentPlayer = deriveActivePlayer(prevTurns);
 
       const updatedTurns = [
         { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
@@ -21,7 +29,6 @@ function App() {
       ];
       return updatedTurns;
     });
-    setActivePlayer((curActivePlayer) => (curActivePlayer === "X" ? "O" : "X"));
   }
   return (
     <main>
